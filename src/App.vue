@@ -20,10 +20,10 @@
            <h2>Lista Film:</h2>
       <div class="cards_container">
         <div class="row row-cols-5">
-          <div class="col p-3" v-for="movie in Movies" :key="movie.id">
-            <div class="card_container">
+          <div class="col py-3 px-2" v-for="movie in Movies" :key="movie.id">
+            <div class="card_container" :class="(movie.poster_path == null) ? 'bg_white' : ''">
               <img :src="IMG_Url_Generator(movie.poster_path)" @error="$event.target.src='https://www.theoxygenstore.com/images/source/No-image.jpg'" :alt="movie.title">
-              <h4>{{movie.title}}</h4>
+              <h5 v-if="movie.poster_path == null" class="m-0">{{movie.title}}</h5>
             </div>
             <!-- /.card_container -->
           </div>
@@ -135,10 +135,27 @@ export default {
     color: black;
     height: 100vh;
     overflow: auto;
+    .card_container {
+    height: 350px;
+    position: relative;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    h5 {
+      position: absolute;
+      bottom: 5px;
+      left: 5px;
+    }
   }
-  .col {
-    height: 400px;
+  .bg_white {
+    background-color: white;
   }
+  }
+  
+  
+
 }
 
 </style>
