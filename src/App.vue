@@ -1,6 +1,9 @@
 <template>
   <div id="app">
-    
+    <header class="text-center">
+      <input v-model="Query" type="text">
+      <button class="ms-3" @click="callApi">Go</button>
+    </header>
   </div>
 </template>
 
@@ -32,7 +35,7 @@ export default {
     }
   },
   mounted() {
-        this.callApi();
+       // this.callApi();
     },
 }
 </script>
