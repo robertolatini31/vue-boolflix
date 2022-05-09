@@ -26,6 +26,24 @@
               <h5 v-if="movie.poster_path == null" class="m-0">{{movie.title}}</h5>
             </div>
             <!-- /.card_container -->
+            <div class="card_description mt-3 pt-1 px-2">
+              <h5>Titolo: <span>{{movie.title}}</span></h5>
+              <h5>Titolo Originale: <span>{{movie.original_title}}</span></h5>
+              <h5>Lingua: <span>
+                            <LangFlag :iso="movie.original_language" />
+                          </span>
+              </h5>
+              <h5>Voto: <span>
+                          <font-awesome-icon icon="fa-solid fa-star" v-for="item in (StarVotes(movie.vote_average))"  :key="item" />
+                          <font-awesome-icon icon="fa-regular fa-star" v-for="item in (5 - StarVotes(movie.vote_average))"  :key="item + 5" />
+                        </span>
+              </h5>
+              <h5>Overview: 
+                <span v-if="movie.overview.length != 0">{{movie.overview}}</span>
+                <span v-else>Nessuna Descrizione Disponibile.</span>
+              </h5>
+            </div>
+            <!-- /.card_description -->
           </div>
           <!-- /.col -->
         </div>
@@ -134,22 +152,38 @@ export default {
     background-color: gray;
     color: black;
     height: 100vh;
-    overflow: auto;
+    overflow-y: auto;
+    .col {
+      position: relative;
+    }
     .card_container {
-    height: 350px;
-    position: relative;
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+      height: 350px;
+      position: relative;
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      h5 {
+        position: absolute;
+        bottom: 5px;
+        left: 5px;
+      }
     }
-    h5 {
+    .card_description {
+      background-color: black;
+      color: white;
+      height: 350px;
+      overflow-y: auto;
       position: absolute;
-      bottom: 5px;
-      left: 5px;
+      top: 0;
+      left: 0;
+      display: none;
     }
-  }
-  .bg_white {
+    .card_container:hover + .card_description, .card_description:hover {
+      display: block;
+    }
+    .bg_white {
     background-color: white;
   }
   }
