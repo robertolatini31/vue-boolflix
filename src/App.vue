@@ -219,6 +219,7 @@ export default {
       }
     }
     .card_description {
+      background-size: cover!important;;
       color: white;
       height: 100%;
       width: 100%;
