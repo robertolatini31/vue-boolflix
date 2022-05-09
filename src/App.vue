@@ -12,6 +12,7 @@
         <!-- <li>Lingua: {{movie.original_language}}</li> -->
         <li>Lingua: <LangFlag :iso="movie.original_language" /></li>
         <li>Voto: {{movie.vote_average}}</li>
+        <li>IMG: {{IMG_Url_Generator(movie.poster_path)}}</li>
       </ul>
 
 
@@ -22,6 +23,7 @@
         <!-- <li>Lingua: {{serie.original_language}}</li> -->
         <li>Lingua: <LangFlag :iso="serie.original_language" /></li>
         <li>Voto: {{serie.vote_average}}</li>
+        <li>IMG: {{IMG_Url_Generator(serie.poster_path)}}</li>
       </ul>
 
     </main>
@@ -50,6 +52,9 @@ export default {
   methods: {
     Api_Url_Generator(){
       return 'https://api.themoviedb.org/3/search/movie?api_key=' + this.Api_Key + '&language=it-IT&query=' + this.Query + '&page=1&include_adult=false';
+    },
+    IMG_Url_Generator(ApiImage){
+      return 'https://image.tmdb.org/t/p/' + 'original' + ApiImage;
     },
     callApi() {
       let MoviesUrl = 'https://api.themoviedb.org/3/search/movie?api_key=' + this.Api_Key + '&language=it-IT&query=' + this.Query + '&page=1&include_adult=false';
