@@ -6,12 +6,18 @@
     </header>
     <main class="p-3">
       <h2>Lista Film:</h2>
+                                                                <!-- <font-awesome-icon icon="fa-solid fa-star" />
+                                                                <font-awesome-icon icon="fa-regular fa-star" /> -->
       <ul v-for="movie in Movies" :key="movie.id">
         <li>Titolo: {{movie.title}}</li>
         <li>Titolo Originale: {{movie.original_title}}</li>
         <!-- <li>Lingua: {{movie.original_language}}</li> -->
         <li>Lingua: <LangFlag :iso="movie.original_language" /></li>
-        <li>Voto: {{movie.vote_average}}</li>
+        <li>
+          Voto:
+          <font-awesome-icon icon="fa-solid fa-star" v-for="item in (StarVotes(movie.vote_average))"  :key="item" />
+          <font-awesome-icon icon="fa-regular fa-star" v-for="item in (5 - StarVotes(movie.vote_average))"  :key="item" />
+        </li>
         <li>IMG: {{IMG_Url_Generator(movie.poster_path)}}</li>
       </ul>
 
@@ -22,7 +28,11 @@
         <li>Titolo Originale: {{serie.original_name}}</li>
         <!-- <li>Lingua: {{serie.original_language}}</li> -->
         <li>Lingua: <LangFlag :iso="serie.original_language" /></li>
-        <li>Voto: {{serie.vote_average}}</li>
+        <li>
+          Voto:
+          <font-awesome-icon icon="fa-solid fa-star" v-for="item in (StarVotes(serie.vote_average))"  :key="item" />
+          <font-awesome-icon icon="fa-regular fa-star" v-for="item in (5 - StarVotes(serie.vote_average))"  :key="item" />
+        </li>
         <li>IMG: {{IMG_Url_Generator(serie.poster_path)}}</li>
       </ul>
 
@@ -50,6 +60,9 @@ export default {
     }
   },
   methods: {
+    StarVotes(number) {
+      return Math.ceil(number / 2);
+    },
     Api_Url_Generator(){
       return 'https://api.themoviedb.org/3/search/movie?api_key=' + this.Api_Key + '&language=it-IT&query=' + this.Query + '&page=1&include_adult=false';
     },
