@@ -7,7 +7,7 @@
       <!-- /.right_header -->
       <div class="left_header">
         <form class="d-flex" @submit.prevent>
-          <input class="form-control me-2 border-danger" type="search" placeholder="Search" aria-label="Search" v-model="Query">
+          <input class="form-control me-2 border-danger" type="search" placeholder="Search" aria-label="Search" v-model="Query" @keyup.enter="callApi">
           <button class="btn border-danger text-white" type="submit"  @click="callApi">Search</button>
         </form>
       </div>
@@ -18,15 +18,16 @@
     <main class="p-3">
       <div class="container">
            <h2>Lista Film:</h2>
-      <div class="cards_container">
-        <div class="row row-cols-5">
-          <div class="col py-3 px-2" v-for="movie in Movies" :key="movie.id">
+      
+        <div class="row row-cols-xxl-5 row-cols-xl-4 row-cols-lg-3 row-cols-md-2 row-cols-1 justify-content-center">
+          <div class="col py-3 px-2 d-flex justify-content-center align-items-center" v-for="movie in Movies" :key="movie.id">
+            <div class="cards_container">
             <div class="card_container" :class="(movie.poster_path == null) ? 'bg_white' : ''">
               <img :src="IMG_Url_Generator(movie.poster_path)" @error="$event.target.src='https://www.theoxygenstore.com/images/source/No-image.jpg'" :alt="movie.title">
               <h5 v-if="movie.poster_path == null" class="m-0">{{movie.title}}</h5>
             </div>
             <!-- /.card_container -->
-            <div class="card_description mt-3 pt-1 px-2">
+            <div class="card_description p-2">
               <h5>Titolo: <span>{{movie.title}}</span></h5>
               <h5>Titolo Originale: <span>{{movie.original_title}}</span></h5>
               <h5>Lingua: <span>
@@ -34,22 +35,23 @@
                           </span>
               </h5>
               <h5>Voto: <span>
-                          <font-awesome-icon icon="fa-solid fa-star" v-for="item in (StarVotes(movie.vote_average))"  :key="item" />
-                          <font-awesome-icon icon="fa-regular fa-star" v-for="item in (5 - StarVotes(movie.vote_average))"  :key="item + 5" />
+                          <font-awesome-icon icon="fa-solid fa-star" v-for="item in (StarVotes(movie.vote_average))"  :key="item" class="color_star" />
+                          <font-awesome-icon icon="fa-regular fa-star" v-for="item in (5 - StarVotes(movie.vote_average))"  :key="item + 5" class="color_star" />
                         </span>
               </h5>
               <h5>Overview: 
                 <span v-if="movie.overview.length != 0">{{movie.overview}}</span>
-                <span v-else>Nessuna Descrizione Disponibile.</span>
+                <span v-else>Nessuna Descrizione Disponibile</span>
               </h5>
             </div>
             <!-- /.card_description -->
           </div>
+      <!-- /.cards_container -->
+          </div>
           <!-- /.col -->
         </div>
         <!-- /.row row-cols-5 -->
-      </div>
-      <!-- /.cards_container -->
+      
       <!-- <ul v-for="movie in Movies" :key="movie.id">
         <li>Titolo: {{movie.title}}</li>
         <li>Titolo Originale: {{movie.original_title}}</li>
@@ -65,6 +67,40 @@
 
 
       <h2>Lista Serie:</h2>
+       
+        <div class="row row-cols-xxl-5 row-cols-xl-4 row-cols-lg-3 row-cols-md-2 row-cols-1 justify-content-center">
+          <div class="col py-3 px-2 d-flex justify-content-center align-items-center" v-for="serie in Series" :key="serie.id">
+            <div class="cards_container">
+            <div class="card_container" :class="(serie.poster_path == null) ? 'bg_white' : ''">
+              <img :src="IMG_Url_Generator(serie.poster_path)" @error="$event.target.src='https://www.theoxygenstore.com/images/source/No-image.jpg'" :alt="serie.name">
+              <h5 v-if="serie.poster_path == null" class="m-0">{{serie.name}}</h5>
+            </div>
+            <!-- /.card_container -->
+            <div class="card_description p-2">
+              <h5>Titolo: <span>{{serie.name}}</span></h5>
+              <h5>Titolo Originale: <span>{{serie.original_name}}</span></h5>
+              <h5>Lingua: <span>
+                            <LangFlag :iso="serie.original_language" />
+                          </span>
+              </h5>
+              <h5>Voto: <span>
+                          <font-awesome-icon icon="fa-solid fa-star" v-for="item in (StarVotes(serie.vote_average))"  :key="item" class="color_star" />
+                          <font-awesome-icon icon="fa-regular fa-star" v-for="item in (5 - StarVotes(serie.vote_average))"  :key="item + 10" class="color_star" />
+                        </span>
+              </h5>
+              <h5>Overview: 
+                <span v-if="serie.overview.length != 0">{{serie.overview}}</span>
+                <span v-else>Nessuna Descrizione Disponibile</span>
+              </h5>
+            </div>
+            <!-- /.card_description -->
+           </div>
+           <!-- /. cards_container  -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row row-cols-5 -->
+     
       <!-- <ul v-for="serie in Series" :key="serie.id">
         <li>Titolo: {{serie.name}}</li>
         <li>Titolo Originale: {{serie.original_name}}</li>
@@ -142,6 +178,9 @@ export default {
   header {
     background-color: black;
     color: white;
+    img {
+      height: 50px;
+    }
     form {
       input, button {
         outline-color: transparent!important;
@@ -153,16 +192,19 @@ export default {
     color: black;
     height: 100vh;
     overflow-y: auto;
-    .col {
+
+    .cards_container {
       position: relative;
+      height: 350px;
+      width: 250px;
     }
     .card_container {
-      height: 350px;
+      height: 100%;
+      width: 100%;
       position: relative;
       img {
-        width: 100%;
         height: 100%;
-        object-fit: cover;
+        object-fit: contain;
       }
       h5 {
         position: absolute;
@@ -173,7 +215,8 @@ export default {
     .card_description {
       background-color: black;
       color: white;
-      height: 350px;
+      height: 100%;
+      width: 100%;
       overflow-y: auto;
       position: absolute;
       top: 0;
@@ -186,6 +229,9 @@ export default {
     .bg_white {
     background-color: white;
   }
+  .color_star {
+        color: goldenrod;
+      }
   }
   
   
