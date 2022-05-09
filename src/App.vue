@@ -203,14 +203,17 @@ export default {
       position: relative;
       height: 350px;
       width: 250px;
+      border-radius: 5px;
     }
     .card_container {
       height: 100%;
       width: 100%;
       position: relative;
+      border-radius: 5px;
       img {
         height: 100%;
         object-fit: contain;
+        border-radius: 5px;
       }
       h5 {
         position: absolute;
@@ -228,6 +231,7 @@ export default {
       top: 0;
       left: 0;
       display: none;
+      border-radius: 5px;
       .text_description {
         filter: drop-shadow(2px 4px 4px black);
       }
