@@ -8,7 +8,8 @@
       <ul v-for="movie in Movies" :key="movie.id">
         <li>Titolo: {{movie.title}}</li>
         <li>Titolo Originale: {{movie.original_title}}</li>
-        <li>Lingua: {{movie.original_language}}</li>
+        <!-- <li>Lingua: {{movie.original_language}}</li> -->
+        <li>Lingua: <LangFlag :iso="movie.original_language" /></li>
         <li>Voto: {{movie.vote_average}}</li>
       </ul>
     </main>
@@ -17,10 +18,12 @@
 
 <script>
 import axios from 'axios';
+import LangFlag from 'vue-lang-code-flags';
 
 export default {
   name: 'App',
   components: {
+    LangFlag,
   },
   data () {
     return {

@@ -1,6 +1,9 @@
 import Vue from 'vue'
 import App from './App.vue'
 
+import LangFlag from 'vue-lang-code-flags';
+Vue.component('LangFlag', LangFlag);
+
 /* Font Awesome icons*/
 /* import the fontawesome core */
 import { library } from '@fortawesome/fontawesome-svg-core'
