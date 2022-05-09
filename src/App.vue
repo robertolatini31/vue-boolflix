@@ -1,53 +1,79 @@
 <template>
   <div id="app">
-    <header class="text-center">
-      <input v-model="Query" type="text">
-      <button class="ms-3" @click="callApi">Go</button>
+    <header class="d-flex align-items-center justify-content-between p-3">
+      <div class="right_header">
+        <img src="@/assets/img/logo.png" alt="">
+      </div>
+      <!-- /.right_header -->
+      <div class="left_header">
+        <form class="d-flex" @submit.prevent>
+          <input class="form-control me-2 border-danger" type="search" placeholder="Search" aria-label="Search" v-model="Query">
+          <button class="btn border-danger text-white" type="submit"  @click="callApi">Search</button>
+        </form>
+      </div>
+      <!-- /.left_header -->
     </header>
+
+
     <main class="p-3">
-      <h2>Lista Film:</h2>
-                                                                <!-- <font-awesome-icon icon="fa-solid fa-star" />
-                                                                <font-awesome-icon icon="fa-regular fa-star" /> -->
-      <ul v-for="movie in Movies" :key="movie.id">
+      <div class="container">
+           <h2>Lista Film:</h2>
+      <div class="cards_container">
+        <div class="row row-cols-5">
+          <div class="col p-3" v-for="movie in Movies" :key="movie.id">
+            <div class="card_container">
+              <img :src="IMG_Url_Generator(movie.poster_path)" @error="$event.target.src='https://www.theoxygenstore.com/images/source/No-image.jpg'" :alt="movie.title">
+              <h4>{{movie.title}}</h4>
+            </div>
+            <!-- /.card_container -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row row-cols-5 -->
+      </div>
+      <!-- /.cards_container -->
+      <!-- <ul v-for="movie in Movies" :key="movie.id">
         <li>Titolo: {{movie.title}}</li>
         <li>Titolo Originale: {{movie.original_title}}</li>
-        <!-- <li>Lingua: {{movie.original_language}}</li> -->
-        <li>Lingua: <LangFlag :iso="movie.original_language" /></li>
+        <!- <li>Lingua: {{movie.original_language}}</li> -->
+        <!-- <li>Lingua: <LangFlag :iso="movie.original_language" /></li>
         <li>
           Voto:
           <font-awesome-icon icon="fa-solid fa-star" v-for="item in (StarVotes(movie.vote_average))"  :key="item" />
-          <font-awesome-icon icon="fa-regular fa-star" v-for="item in (5 - StarVotes(movie.vote_average))"  :key="item" />
+          <font-awesome-icon icon="fa-regular fa-star" v-for="item in (5 - StarVotes(movie.vote_average))"  :key="item + 5" />
         </li>
         <li>IMG: {{IMG_Url_Generator(movie.poster_path)}}</li>
-      </ul>
+      </ul> -->
 
 
       <h2>Lista Serie:</h2>
-      <ul v-for="serie in Series" :key="serie.id">
+      <!-- <ul v-for="serie in Series" :key="serie.id">
         <li>Titolo: {{serie.name}}</li>
         <li>Titolo Originale: {{serie.original_name}}</li>
-        <!-- <li>Lingua: {{serie.original_language}}</li> -->
-        <li>Lingua: <LangFlag :iso="serie.original_language" /></li>
+        <!- <li>Lingua: {{serie.original_language}}</li> -->
+        <!-- <li>Lingua: <LangFlag :iso="serie.original_language" /></li>
         <li>
           Voto:
           <font-awesome-icon icon="fa-solid fa-star" v-for="item in (StarVotes(serie.vote_average))"  :key="item" />
-          <font-awesome-icon icon="fa-regular fa-star" v-for="item in (5 - StarVotes(serie.vote_average))"  :key="item" />
+          <font-awesome-icon icon="fa-regular fa-star" v-for="items in (5 - StarVotes(serie.vote_average))"  :key="items + 10" />
         </li>
         <li>IMG: {{IMG_Url_Generator(serie.poster_path)}}</li>
-      </ul>
+      </ul> --> 
 
+      </div>
+      <!-- /.container -->
     </main>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
-import LangFlag from 'vue-lang-code-flags';
+// import LangFlag from 'vue-lang-code-flags';
 
 export default {
   name: 'App',
   components: {
-    LangFlag,
+    // LangFlag,
   },
   data () {
     return {
@@ -95,7 +121,24 @@ export default {
 <style lang="scss">
 @import '@/assets/scss/style.scss';
 #app {
-  background-color: black;
-  color: white;
+  header {
+    background-color: black;
+    color: white;
+    form {
+      input, button {
+        outline-color: transparent!important;
+      }
+    }
+  }
+  main {
+    background-color: gray;
+    color: black;
+    height: 100vh;
+    overflow: auto;
+  }
+  .col {
+    height: 400px;
+  }
 }
+
 </style>
