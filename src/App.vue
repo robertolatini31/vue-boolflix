@@ -4,6 +4,14 @@
       <input v-model="Query" type="text">
       <button class="ms-3" @click="callApi">Go</button>
     </header>
+    <main class="p-3">
+      <ul v-for="movie in Movies" :key="movie.id">
+        <li>Titolo: {{movie.title}}</li>
+        <li>Titolo Originale: {{movie.original_title}}</li>
+        <li>Lingua: {{movie.original_language}}</li>
+        <li>Voto: {{movie.vote_average}}</li>
+      </ul>
+    </main>
   </div>
 </template>
 
@@ -28,7 +36,8 @@ export default {
     },
     callApi() {
       axios.get(this.Api_Url_Generator()).then((response) => {
-                console.log(response); 
+                console.log(response);
+                this.Movies = response.data.results;
             }).catch((error) => {
                 console.log(error);
             })
@@ -45,6 +54,5 @@ export default {
 #app {
   background-color: black;
   color: white;
-  height: 100vh;
 }
 </style>
