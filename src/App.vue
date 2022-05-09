@@ -27,8 +27,9 @@
               <h5 v-if="movie.poster_path == null" class="m-0">{{movie.title}}</h5>
             </div>
             <!-- /.card_container -->
-            <div class="card_description p-2">
-              <h5>Titolo: <span>{{movie.title}}</span></h5>
+            <div class="card_description p-2" :style="[(movie.backdrop_path != null ? {'background': 'url(' + IMG_Url_Generator(movie.backdrop_path) + ') center no-repeat'} : {'background': 'black'})]">
+              <div class="text_description">
+                <h5>Titolo: <span>{{movie.title}}</span></h5>
               <h5>Titolo Originale: <span>{{movie.original_title}}</span></h5>
               <h5>Lingua: <span>
                             <LangFlag :iso="movie.original_language" />
@@ -43,6 +44,8 @@
                 <span v-if="movie.overview.length != 0">{{movie.overview}}</span>
                 <span v-else>Nessuna Descrizione Disponibile</span>
               </h5>
+              </div>
+              <!-- /.text_description -->
             </div>
             <!-- /.card_description -->
           </div>
@@ -76,8 +79,9 @@
               <h5 v-if="serie.poster_path == null" class="m-0">{{serie.name}}</h5>
             </div>
             <!-- /.card_container -->
-            <div class="card_description p-2">
-              <h5>Titolo: <span>{{serie.name}}</span></h5>
+            <div class="card_description p-2" :style="[(serie.backdrop_path != null ? {'background': 'url(' + IMG_Url_Generator(serie.backdrop_path) + ') center no-repeat'} : {'background': 'black'})]">
+              <div class="text_description">
+                <h5>Titolo: <span>{{serie.name}}</span></h5>
               <h5>Titolo Originale: <span>{{serie.original_name}}</span></h5>
               <h5>Lingua: <span>
                             <LangFlag :iso="serie.original_language" />
@@ -92,6 +96,8 @@
                 <span v-if="serie.overview.length != 0">{{serie.overview}}</span>
                 <span v-else>Nessuna Descrizione Disponibile</span>
               </h5>
+              </div>
+              <!-- /.text_description -->
             </div>
             <!-- /.card_description -->
            </div>
@@ -213,7 +219,6 @@ export default {
       }
     }
     .card_description {
-      background-color: black;
       color: white;
       height: 100%;
       width: 100%;
@@ -222,6 +227,9 @@ export default {
       top: 0;
       left: 0;
       display: none;
+      .text_description {
+        filter: drop-shadow(2px 4px 4px black);
+      }
     }
     .card_container:hover + .card_description, .card_description:hover {
       display: block;
