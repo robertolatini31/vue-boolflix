@@ -7,8 +7,8 @@
       <!-- /.right_header -->
       <div class="left_header">
         <form class="d-flex" @submit.prevent>
-          <input class="form-control me-2 border-danger" type="search" placeholder="Search" aria-label="Search" v-model="Query" @keyup.enter="callApi">
-          <button class="btn border-danger text-white" type="submit"  @click="callApi">Search</button>
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" v-model="Query" @keyup.enter="callApi">
+          <button class="btn" type="submit"  @click="callApi">Search</button>
         </form>
       </div>
       <!-- /.left_header -->
@@ -162,10 +162,6 @@ export default {
     IMG_Url_Generator(ApiImage){
       return 'https://image.tmdb.org/t/p/' + 'original' + ApiImage;
     },
-    CallCastApi(MovieID) {
-      let CastUrl = 'https://api.themoviedb.org/3/movie/' + MovieID + '/credits?api_key=716ab35d3b7d9aab1757e0bac9e90c1c&language=en-US';
-      return axios.get(CastUrl);
-    },
     callApi() {
       let MoviesUrl = 'https://api.themoviedb.org/3/search/movie?api_key=' + this.Api_Key + '&language=it-IT&query=' + this.Query + '&page=1&include_adult=false';
       let SerieUrl = 'https://api.themoviedb.org/3/search/tv?api_key=' + this.Api_Key + '&language=it-IT&query=' + this.Query + '&page=1&include_adult=false';
@@ -174,7 +170,7 @@ export default {
                 //console.log(response);
                 this.Movies = response.data.results;
                 this.Movies.forEach(movie => {
-                  this.CallCastApi(movie.id).then((responseCast) => {
+                  axios.get('https://api.themoviedb.org/3/movie/' + movie.id + '/credits?api_key=716ab35d3b7d9aab1757e0bac9e90c1c&language=en-US').then((responseCast) => {
                       movie.Actors = responseCast.data.cast.slice(0, 5);
                   });
                 });
@@ -211,14 +207,19 @@ export default {
       height: 50px;
     }
     form {
-      input, button {
-        outline-color: transparent!important;
+      button, input {
+        // outline-color: transparent!important;
+        border-color: #dc1a28!important;
+      }
+      button {
+         color: #dc1a28;
       }
     }
   }
   main {
-    background-color: gray;
-    color: black;
+    background-color: #0d0d0d;
+    box-shadow: 0px 9px 19px 0px white;
+    color: white;
     height: 100vh;
     overflow-y: auto;
 
@@ -227,6 +228,7 @@ export default {
     }
 
     .cards_container {
+      box-shadow: 0px 0px 8px white;
       position: relative;
       height: 350px;
       width: 240px;
