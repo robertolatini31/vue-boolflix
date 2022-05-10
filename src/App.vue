@@ -40,10 +40,10 @@
                           <font-awesome-icon icon="fa-regular fa-star" v-for="item in (5 - StarVotes(movie.vote_average))"  :key="item + 5" class="color_star" />
                         </span>
               </h5>
-              <h5>Cast: <span v-for="actor in SearchCast(movie.id)" :key="actor.id">
+              <!-- <h5>Cast: <span v-for="actor in SearchCast(movie.id)" :key="actor.id">
                           {{actor.name}}
                         </span>
-              </h5>
+              </h5> -->
               <h5>Overview: 
                 <span v-if="movie.overview.length != 0">{{movie.overview}}</span>
                 <span v-else>Nessuna Descrizione Disponibile</span>
@@ -146,6 +146,7 @@ export default {
       Api_Key: '716ab35d3b7d9aab1757e0bac9e90c1c',
       Query: '',
       Movies: null,
+      MovieArrayCast: null,
       Series: null,
       Genre: null,
       GenreSeries: null,
@@ -161,40 +162,33 @@ export default {
     IMG_Url_Generator(ApiImage){
       return 'https://image.tmdb.org/t/p/' + 'original' + ApiImage;
     },
-    SearchCast(MovieID) {
-      let MovieCast = [];
+    CallCastApi(MovieID) {
       let CastUrl = 'https://api.themoviedb.org/3/movie/' + MovieID + '/credits?api_key=716ab35d3b7d9aab1757e0bac9e90c1c&language=en-US';
-      axios.get(CastUrl).then((response) => {
-                console.log(response);
-                response.data.cast.forEach(element => {
-                    if (MovieCast.length < 5) { //controllo se ogni membro della trope fa l'attore o no e se è attore lo pusho nel mio array fino ad avere 5 attori
-                      MovieCast.push(element);
-                    }
-                 });
-                
-            }).catch((error) => {
-                console.log(error);
-            })
-      return MovieCast;
+      return axios.get(CastUrl);
     },
     callApi() {
       let MoviesUrl = 'https://api.themoviedb.org/3/search/movie?api_key=' + this.Api_Key + '&language=it-IT&query=' + this.Query + '&page=1&include_adult=false';
       let SerieUrl = 'https://api.themoviedb.org/3/search/tv?api_key=' + this.Api_Key + '&language=it-IT&query=' + this.Query + '&page=1&include_adult=false';
       let GenreUrl = 'https://api.themoviedb.org/3/genre/list?api_key=716ab35d3b7d9aab1757e0bac9e90c1c&language=it-IT';      
       axios.get(MoviesUrl).then((response) => {
-                console.log(response);
-                this.Movies = response.data.results;    
+                //console.log(response);
+                this.Movies = response.data.results;
+                this.Movies.forEach(movie => {
+                  this.CallCastApi(movie.id).then((responseCast) => {
+                      movie.Actors = responseCast.data.cast.slice(0, 5);
+                  });
+                });
             }).catch((error) => {
                 console.log(error);
             })
       axios.get(SerieUrl).then((response) => {
-                console.log(response);
+               //console.log(response);
                 this.Series = response.data.results;
             }).catch((error) => {
                 console.log(error);
             })
       axios.get(GenreUrl).then((response) => {
-                console.log(response);
+                //console.log(response);
                 this.Genre = response.data.genres;
             }).catch((error) => {
                 console.log(error);
@@ -288,3 +282,6 @@ export default {
 }
 
 </style>
+
+
+
