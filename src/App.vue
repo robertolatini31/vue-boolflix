@@ -162,19 +162,18 @@ export default {
     IMG_Url_Generator(ApiImage){
       return 'https://image.tmdb.org/t/p/' + 'original' + ApiImage;
     },
-    CallCast(movie){
-      return  axios.get('https://api.themoviedb.org/3/movie/' + movie.id + '/credits?api_key=716ab35d3b7d9aab1757e0bac9e90c1c&language=en-US').then((responseCast) => {
+    CallCast(){
+       this.Movies.forEach(movie => {
+        axios.get('https://api.themoviedb.org/3/movie/' + movie.id + '/credits?api_key=716ab35d3b7d9aab1757e0bac9e90c1c&language=en-US').then((responseCast) => {
                       movie.Actors = responseCast.data.cast.slice(0, 5);
                   });
+      });
     },
     CallMovies(){
         let MoviesUrl = 'https://api.themoviedb.org/3/search/movie?api_key=' + this.Api_Key + '&language=it-IT&query=' + this.Query + '&page=1&include_adult=false';
       return  axios.get(MoviesUrl).then((response) => {
                 //console.log(response);
                 this.Movies = response.data.results;
-                this.Movies.forEach(movie => {
-                  Promise.all([this.CallCast(movie)])
-                });
             }).catch((error) => {
                 console.log(error);
             })
@@ -202,7 +201,12 @@ export default {
          Promise.all([
            this.CallMovies(),
            this.CallSeries(),
-         ])
+         ]).then(
+           this.CallCast()
+         )
+
+          
+         
       
     }
   },
