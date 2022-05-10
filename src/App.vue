@@ -40,10 +40,10 @@
                           <font-awesome-icon icon="fa-regular fa-star" v-for="item in (5 - StarVotes(movie.vote_average))"  :key="item + 5" class="color_star" />
                         </span>
               </h5>
-              <!-- <h5>Cast: <span v-for="actor in SearchCast(movie.id)" :key="actor.id">
+              <h5>Cast: <span v-for="actor in movie.Actors" :key="actor.id">
                           {{actor.name}}
                         </span>
-              </h5> -->
+              </h5>
               <h5>Overview: 
                 <span v-if="movie.overview.length != 0">{{movie.overview}}</span>
                 <span v-else>Nessuna Descrizione Disponibile</span>
