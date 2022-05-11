@@ -7,8 +7,8 @@
       <!-- /.right_header -->
       <div class="left_header">
         <form class="d-flex" @submit.prevent>
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" v-model="Query" @keyup.enter="callApi">
-          <button class="btn" type="submit"  @click="callApi">Search</button>
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" v-model="Query" @keyup.enter="CallApi">
+          <button class="btn" type="submit"  @click="CallApi">Search</button>
         </form>
       </div>
       <!-- /.left_header -->
@@ -16,7 +16,7 @@
 
 
     <main class="p-3">
-      <div v-if="ControlMoviesCast" class="container">
+      <div class="container">
            <h2>Lista Film:</h2>
       
         <div class="row row-cols-xxl-5 row-cols-xl-4 row-cols-lg-3 row-cols-md-2 row-cols-1 justify-content-center">
@@ -96,6 +96,10 @@
                           <font-awesome-icon icon="fa-regular fa-star" v-for="item in (5 - StarVotes(serie.vote_average))"  :key="item + 10" class="color_star" />
                         </span>
               </h5>
+              <h5>Cast: <span v-for="actor in serie.Actors" :key="actor.id">
+                          {{actor.name}}
+                        </span>
+              </h5>
               <h5>Overview: 
                 <span v-if="serie.overview.length != 0">{{serie.overview}}</span>
                 <span v-else>Nessuna Descrizione Disponibile</span>
@@ -146,8 +150,6 @@ export default {
       Api_Key: '716ab35d3b7d9aab1757e0bac9e90c1c',
       Query: '',
       Movies: null,
-      ControlMoviesCast: false,
-      MovieArrayCast: null,
       Series: null,
       Genre: null,
       GenreSeries: null,
@@ -163,29 +165,6 @@ export default {
     IMG_Url_Generator(ApiImage){
       return 'https://image.tmdb.org/t/p/' + 'original' + ApiImage;
     },
-    CallMovies(){
-        let MoviesUrl = 'https://api.themoviedb.org/3/search/movie?api_key=' + this.Api_Key + '&language=it-IT&query=' + this.Query + '&page=1&include_adult=false';
-      return  axios.get(MoviesUrl).then((response) => {
-                //console.log(response);
-                this.Movies = response.data.results;
-                this.Movies.forEach(movie => {
-              axios.get('https://api.themoviedb.org/3/movie/' + movie.id + '/credits?api_key=716ab35d3b7d9aab1757e0bac9e90c1c&language=en-US').then((responseCast) => {
-                      movie.Actors = responseCast.data.cast.slice(0, 5);
-                  });
-              });
-            }).catch((error) => {
-                console.log(error);
-            })
-    },
-    CallSeries() {
-        let SerieUrl = 'https://api.themoviedb.org/3/search/tv?api_key=' + this.Api_Key + '&language=it-IT&query=' + this.Query + '&page=1&include_adult=false';
-       return axios.get(SerieUrl).then((response) => {
-               //console.log(response);
-                this.Series = response.data.results;
-            }).catch((error) => {
-                console.log(error);
-            })
-    },
     CallGenre() {
         let GenreUrl = 'https://api.themoviedb.org/3/genre/list?api_key=716ab35d3b7d9aab1757e0bac9e90c1c&language=it-IT';      
        axios.get(GenreUrl).then((response) => {
@@ -195,7 +174,7 @@ export default {
                 console.log(error);
             })
     },
-    callApi() {
+    CallApi() {
           let MoviesUrl = 'https://api.themoviedb.org/3/search/movie?api_key=' + this.Api_Key + '&language=it-IT&query=' + this.Query + '&page=1&include_adult=false';
           axios.get(MoviesUrl).then((response) => {
                 //console.log(response);
@@ -207,7 +186,6 @@ export default {
                   });
 
               });
-              this.ControlMoviesCast = true;
             }).catch((error) => {
                 console.log(error);
             });
@@ -216,6 +194,13 @@ export default {
        return axios.get(SerieUrl).then((response) => {
                //console.log(response);
                 this.Series = response.data.results;
+                this.Series.forEach(serie => {
+              axios.get('https://api.themoviedb.org/3/tv/' + serie.id + '/credits?api_key=716ab35d3b7d9aab1757e0bac9e90c1c&language=en-US').then((responseCast) => {
+                      serie.Actors = responseCast.data.cast.slice(0, 5);
+                      this.$forceUpdate()
+                  });
+
+              });
             }).catch((error) => {
                 console.log(error);
             })
