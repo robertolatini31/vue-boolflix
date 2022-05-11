@@ -21,8 +21,9 @@
 
 
     <main class="p-3">
-      <div class="container" v-if="Movies.length > 0">
-           <h2>Lista Film:</h2>
+      <div class="container" >
+      <div class="movies_if" v-if="Movies.length > 0">
+             <h2>Lista Film:</h2>
       <div class="control_movies_true" v-if="FilteredMovies.length > 0">
         <div class="row row-cols-xxl-5 row-cols-xl-4 row-cols-lg-3 row-cols-md-2 row-cols-1 justify-content-center">
           <div class="col py-3 px-2 d-flex justify-content-center align-items-center" v-for="movie in FilteredMovies" :key="movie.id">
@@ -75,11 +76,14 @@
       </div>
       <!-- /.control_Movies -->
 
-      <div class="control_movies_false" v-else>
-        <h2 class="text-center text-white p-4">Nessun Film Trovato...😅</h2>
+      <div class="control_movies_false text-center text-white p-4" v-else>
+        <h2>Nessun Film Trovato</h2>
+        <p>cambiare filtri</p>
       </div>
       <!-- /.control_movies_false -->
 
+      </div>
+      <!-- /.movies_if -->
 
 
       <!-- <ul v-for="movie in Movies" :key="movie.id">
@@ -96,10 +100,11 @@
       </ul> -->
 
 
-      <h2>Lista Serie:</h2>
-       
+      <div class="series_if" v-if="Series.length > 0">
+        <h2>Lista Serie:</h2>
+        <div class="control_series_true" v-if="FilteredMovies.length > 0">
         <div class="row row-cols-xxl-5 row-cols-xl-4 row-cols-lg-3 row-cols-md-2 row-cols-1 justify-content-center">
-          <div class="col py-3 px-2 d-flex justify-content-center align-items-center" v-for="serie in Series" :key="serie.id">
+          <div class="col py-3 px-2 d-flex justify-content-center align-items-center" v-for="serie in FilteredSeries" :key="serie.id">
             <div class="cards_container">
             <div class="card_container" :class="(serie.poster_path == null) ? 'bg_white' : ''">
               <img :src="IMG_Url_Generator(serie.poster_path)" @error="$event.target.src='https://www.theoxygenstore.com/images/source/No-image.jpg'" :alt="serie.name">
@@ -143,6 +148,15 @@
           <!-- /.col -->
         </div>
         <!-- /.row row-cols-5 -->
+        </div>
+        <!-- /.control_series_true -->
+        <div class="control_series_false text-center text-white p-4" v-else>
+            <h2>Nessuna Serie Trovata</h2>
+            <p>cambiare filtri</p>
+        </div>
+        <!-- /.control_series_false -->
+      </div>
+      <!-- /.series_if -->
      
       <!-- <ul v-for="serie in Series" :key="serie.id">
         <li>Titolo: {{serie.name}}</li>
@@ -257,6 +271,13 @@ export default {
            return Movie.genre_ids.includes(this.GenreSelected);
            })
         } else return this.Movies;
+    },
+    FilteredSeries(){
+        if (this.Series.length > 0 && this.GenreSelected != '') {
+          return  this.Series.filter(Serie => {
+           return Serie.genre_ids.includes(this.GenreSelected);
+           })
+        } else return this.Series;
     }
   },
 }
