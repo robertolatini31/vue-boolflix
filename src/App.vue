@@ -16,7 +16,7 @@
 
 
     <main class="p-3">
-      <div class="container">
+      <div v-if="ControlMoviesCast" class="container">
            <h2>Lista Film:</h2>
       
         <div class="row row-cols-xxl-5 row-cols-xl-4 row-cols-lg-3 row-cols-md-2 row-cols-1 justify-content-center">
@@ -146,6 +146,7 @@ export default {
       Api_Key: '716ab35d3b7d9aab1757e0bac9e90c1c',
       Query: '',
       Movies: null,
+      ControlMoviesCast: false,
       MovieArrayCast: null,
       Series: null,
       Genre: null,
@@ -195,16 +196,38 @@ export default {
             })
     },
     callApi() {
+          let MoviesUrl = 'https://api.themoviedb.org/3/search/movie?api_key=' + this.Api_Key + '&language=it-IT&query=' + this.Query + '&page=1&include_adult=false';
+          axios.get(MoviesUrl).then((response) => {
+                //console.log(response);
+                this.Movies = response.data.results;
+                this.Movies.forEach(movie => {
+              axios.get('https://api.themoviedb.org/3/movie/' + movie.id + '/credits?api_key=716ab35d3b7d9aab1757e0bac9e90c1c&language=en-US').then((responseCast) => {
+                      movie.Actors = responseCast.data.cast.slice(0, 5);
+                      this.$forceUpdate()
+                  });
+
+              });
+              this.ControlMoviesCast = true;
+            }).catch((error) => {
+                console.log(error);
+            });
+            
+            let SerieUrl = 'https://api.themoviedb.org/3/search/tv?api_key=' + this.Api_Key + '&language=it-IT&query=' + this.Query + '&page=1&include_adult=false';
+       return axios.get(SerieUrl).then((response) => {
+               //console.log(response);
+                this.Series = response.data.results;
+            }).catch((error) => {
+                console.log(error);
+            })
          
-         Promise.all([
-           this.CallMovies(),
-           this.CallSeries(),
-         ])
     }
   },
   mounted() {
        // this.callApi();
     },
+  computed: {
+    
+  },
 }
 </script>
 
