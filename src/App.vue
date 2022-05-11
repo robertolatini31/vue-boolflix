@@ -24,7 +24,7 @@
             <div class="cards_container">
             <div class="card_container" :class="(movie.poster_path == null) ? 'bg_white' : ''">
               <img :src="IMG_Url_Generator(movie.poster_path)" @error="$event.target.src='https://www.theoxygenstore.com/images/source/No-image.jpg'" :alt="movie.title">
-              <h5 v-if="movie.poster_path == null" class="m-0">{{movie.title}}</h5>
+              <h5 class="safe_title m-0" v-if="movie.poster_path == null">{{movie.title}}</h5>
             </div>
             <!-- /.card_container -->
             <div class="card_description p-2" :style="[(movie.backdrop_path != null ? {'background': 'linear-gradient(rgba(0, 0, 0, 0.5),rgba(0, 0, 0, 0.5)),' + 'url(' + IMG_Url_Generator(movie.backdrop_path) + ') center no-repeat'} : {'background': 'linear-gradient(rgba(0, 0, 0, 0.5),rgba(0, 0, 0, 0.5))'})]">
@@ -43,6 +43,12 @@
               <h5>Cast: <span v-for="actor in movie.Actors" :key="actor.id">
                           {{actor.name}}
                         </span>
+                        <span v-if="movie.Actors.length == 0">Nessuna Informazione</span>
+              </h5>
+              <h5>Generi: <span v-for="(GenreName, index) in FilterGenre(movie.genre_ids)" :key="index + GenreName">
+                            {{GenreName}}
+                          </span>
+                          <span v-if="FilterGenre(movie.genre_ids).length == 0">Nessuna Informazione</span>
               </h5>
               <h5>Overview: 
                 <span v-if="movie.overview.length != 0">{{movie.overview}}</span>
@@ -80,7 +86,7 @@
             <div class="cards_container">
             <div class="card_container" :class="(serie.poster_path == null) ? 'bg_white' : ''">
               <img :src="IMG_Url_Generator(serie.poster_path)" @error="$event.target.src='https://www.theoxygenstore.com/images/source/No-image.jpg'" :alt="serie.name">
-              <h5 v-if="serie.poster_path == null" class="m-0">{{serie.name}}</h5>
+              <h5 v-if="serie.poster_path == null" class="safe_title m-0">{{serie.name}}</h5>
             </div>
             <!-- /.card_container -->
             <div class="card_description p-2" :style="[(serie.backdrop_path != null ? {'background': 'linear-gradient(rgba(0, 0, 0, 0.5),rgba(0, 0, 0, 0.5)),' + 'url(' + IMG_Url_Generator(serie.backdrop_path) + ') center no-repeat'} : {'background': 'linear-gradient(rgba(0, 0, 0, 0.5),rgba(0, 0, 0, 0.5))'})]">
@@ -97,8 +103,14 @@
                         </span>
               </h5>
               <h5>Cast: <span v-for="actor in serie.Actors" :key="actor.id">
-                          {{actor.name}}
+                          {{actor.name}} 
                         </span>
+                        <span v-if="serie.Actors.length == 0">Nessuna Informazione</span>
+              </h5>
+              <h5>Generi: <span v-for="(GenreName, index) in FilterGenre(serie.genre_ids)" :key="index + GenreName">
+                            {{GenreName}}
+                          </span>
+                          <span v-if="FilterGenre(serie.genre_ids).length == 0">Nessuna Informazione</span>
               </h5>
               <h5>Overview: 
                 <span v-if="serie.overview.length != 0">{{serie.overview}}</span>
@@ -151,7 +163,7 @@ export default {
       Query: '',
       Movies: null,
       Series: null,
-      Genre: null,
+      Genres: null,
       GenreSeries: null,
     }
   },
@@ -169,7 +181,7 @@ export default {
         let GenreUrl = 'https://api.themoviedb.org/3/genre/list?api_key=716ab35d3b7d9aab1757e0bac9e90c1c&language=it-IT';      
        axios.get(GenreUrl).then((response) => {
                 //console.log(response);
-                this.Genre = response.data.genres;
+                this.Genres = response.data.genres;
             }).catch((error) => {
                 console.log(error);
             })
@@ -205,14 +217,22 @@ export default {
                 console.log(error);
             })
          
-    }
+    },
+    FilterGenre(MovieGenres){
+        let NamesGenres = [];
+        MovieGenres.forEach(MovieGenre => {
+          this.Genres.forEach(Genre => {
+            if (MovieGenre == Genre.id) {
+              NamesGenres.push(Genre.name)
+            }
+          });
+        });
+        return NamesGenres;
+    },
   },
   mounted() {
-       // this.callApi();
+       this.CallGenre();
     },
-  computed: {
-    
-  },
 }
 </script>
 
@@ -265,7 +285,8 @@ export default {
         object-position: center;
         border-radius: 5px;
       }
-      h5 {
+      .safe_title {
+        color: black;
         position: absolute;
         bottom: 5px;
         left: 5px;
