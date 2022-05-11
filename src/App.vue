@@ -8,6 +8,11 @@
       <div class="left_header">
         <form class="d-flex" @submit.prevent>
           <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" v-model="Query" @keyup.enter="CallApi">
+          <select class="form-select me-2" v-model="GenreSelected">
+            <option value="" disabled selected>Scegli Genere</option>
+            <option value="">All</option>
+            <option v-for="genre in Genres" :key="genre.id" :value="genre.id">{{genre.name}}</option>
+          </select>
           <button class="btn" type="submit"  @click="CallApi">Search</button>
         </form>
       </div>
@@ -16,11 +21,11 @@
 
 
     <main class="p-3">
-      <div class="container">
+      <div class="container" v-if="Movies.length > 0">
            <h2>Lista Film:</h2>
-      
+      <div class="control_movies_true" v-if="FilteredMovies.length > 0">
         <div class="row row-cols-xxl-5 row-cols-xl-4 row-cols-lg-3 row-cols-md-2 row-cols-1 justify-content-center">
-          <div class="col py-3 px-2 d-flex justify-content-center align-items-center" v-for="movie in Movies" :key="movie.id">
+          <div class="col py-3 px-2 d-flex justify-content-center align-items-center" v-for="movie in FilteredMovies" :key="movie.id">
             <div class="cards_container">
             <div class="card_container" :class="(movie.poster_path == null) ? 'bg_white' : ''">
               <img :src="IMG_Url_Generator(movie.poster_path)" @error="$event.target.src='https://www.theoxygenstore.com/images/source/No-image.jpg'" :alt="movie.title">
@@ -40,12 +45,12 @@
                           <font-awesome-icon icon="fa-regular fa-star" v-for="item in (5 - StarVotes(movie.vote_average))"  :key="item + 5" class="color_star" />
                         </span>
               </h5>
-              <h5>Cast: <span v-for="actor in movie.Actors" :key="actor.id">
+              <h5>Cast: <span v-for="(actor, index) in movie.Actors" :key="actor.id + 'ciao' + index">
                           {{actor.name}}
                         </span>
-                        <span v-if="movie.Actors.length == 0">Nessuna Informazione</span>
+                       
               </h5>
-              <h5>Generi: <span v-for="(GenreName, index) in FilterGenre(movie.genre_ids)" :key="index + GenreName">
+              <h5>Generi: <span v-for="(GenreName, index) in FilterGenre(movie.genre_ids)" :key="GenreName + index">
                             {{GenreName}}
                           </span>
                           <span v-if="FilterGenre(movie.genre_ids).length == 0">Nessuna Informazione</span>
@@ -62,9 +67,21 @@
       <!-- /.cards_container -->
           </div>
           <!-- /.col -->
+
+          
+
         </div>
         <!-- /.row row-cols-5 -->
-      
+      </div>
+      <!-- /.control_Movies -->
+
+      <div class="control_movies_false" v-else>
+        <h2 class="text-center text-white p-4">Nessun Film Trovato...😅</h2>
+      </div>
+      <!-- /.control_movies_false -->
+
+
+
       <!-- <ul v-for="movie in Movies" :key="movie.id">
         <li>Titolo: {{movie.title}}</li>
         <li>Titolo Originale: {{movie.original_title}}</li>
@@ -102,10 +119,10 @@
                           <font-awesome-icon icon="fa-regular fa-star" v-for="item in (5 - StarVotes(serie.vote_average))"  :key="item + 10" class="color_star" />
                         </span>
               </h5>
-              <h5>Cast: <span v-for="actor in serie.Actors" :key="actor.id">
+              <h5>Cast: <span v-for="(actor, index) in serie.Actors" :key="actor.id + 'unique' + index">
                           {{actor.name}} 
                         </span>
-                        <span v-if="serie.Actors.length == 0">Nessuna Informazione</span>
+                        <!-- <span v-if="serie.Actors.length == 0">Nessuna Informazione</span> -->
               </h5>
               <h5>Generi: <span v-for="(GenreName, index) in FilterGenre(serie.genre_ids)" :key="index + GenreName">
                             {{GenreName}}
@@ -161,10 +178,10 @@ export default {
       Api_Url: 'https://api.themoviedb.org/3/search/movie?api_key=716ab35d3b7d9aab1757e0bac9e90c1c&language=it-IT&query=<<QUERY>>&page=1&include_adult=false',
       Api_Key: '716ab35d3b7d9aab1757e0bac9e90c1c',
       Query: '',
-      Movies: null,
-      Series: null,
-      Genres: null,
-      GenreSeries: null,
+      Movies: [],
+      Series: [],
+      Genres: [],
+      GenreSelected: '',
     }
   },
   methods: {
@@ -232,7 +249,16 @@ export default {
   },
   mounted() {
        this.CallGenre();
-    },
+  },
+  computed: {
+    FilteredMovies(){
+        if (this.Movies.length > 0 && this.GenreSelected != '') {
+          return  this.Movies.filter(Movie => {
+           return Movie.genre_ids.includes(this.GenreSelected);
+           })
+        } else return this.Movies;
+    }
+  },
 }
 </script>
 
@@ -246,7 +272,7 @@ export default {
       height: 50px;
     }
     form {
-      button, input {
+      button, input, select {
         // outline-color: transparent!important;
         border-color: #dc1a28!important;
       }
