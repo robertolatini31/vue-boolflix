@@ -468,7 +468,10 @@ export default {
   }
   main {
     padding-top: 100px!important;
-    background-color: #0d0d0d;
+    // background-color: #0d0d0d;
+    background-image: url('@/assets/img/bg_dark.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
     color: white;
     height: 100vh;
     overflow-y: auto;
