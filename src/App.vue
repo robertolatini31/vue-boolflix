@@ -533,7 +533,7 @@ export default {
     background-color: white;
   }
   .color_star {
-        color: goldenrod;
+        color: #dc1a28;
       }
   }
   
