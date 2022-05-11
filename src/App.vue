@@ -7,13 +7,13 @@
       <!-- /.right_header -->
       <div class="left_header">
         <form class="d-flex" @submit.prevent>
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" v-model="Query" @keyup.enter="CallApi">
+          <input class="form-control me-2" type="search" placeholder="Cerca" aria-label="Search" v-model="Query" @keyup.enter="CallApi">
           <select class="form-select me-2" v-model="GenreSelected">
             <option value="" disabled selected>Scegli Genere</option>
-            <option value="">All</option>
+            <option value="">Tutti</option>
             <option v-for="genre in Genres" :key="genre.id" :value="genre.id">{{genre.name}}</option>
           </select>
-          <button class="btn" type="submit"  @click="CallApi">Search</button>
+          <button class="btn " type="submit"  @click="CallApi"><font-awesome-icon icon="fa-solid fa-magnifying-glass" /></button>
         </form>
       </div>
       <!-- /.left_header -->
@@ -21,7 +21,7 @@
 
 
     <main class="p-3">
-      <div class="container" >
+      <div class="container mt-4">
       <div class="movies_if" v-if="Movies.length > 0">
              <h2>Lista Film:</h2>
       <div class="control_movies_true" v-if="FilteredMovies.length > 0">
@@ -102,7 +102,7 @@
 
       <div class="series_if" v-if="Series.length > 0">
         <h2>Lista Serie:</h2>
-        <div class="control_series_true" v-if="FilteredMovies.length > 0">
+        <div class="control_series_true" v-if="FilteredSeries.length > 0">
         <div class="row row-cols-xxl-5 row-cols-xl-4 row-cols-lg-3 row-cols-md-2 row-cols-1 justify-content-center">
           <div class="col py-3 px-2 d-flex justify-content-center align-items-center" v-for="serie in FilteredSeries" :key="serie.id">
             <div class="cards_container">
@@ -287,7 +287,12 @@ export default {
 @import '@/assets/scss/style.scss';
 #app {
   header {
-    background-color: black;
+    box-shadow: 0px -16px 20px 0px white;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+    background-color: rgb(0 0 0 / 96%);
     color: white;
     img {
       height: 50px;
@@ -303,8 +308,8 @@ export default {
     }
   }
   main {
+    padding-top: 100px!important;
     background-color: #0d0d0d;
-    box-shadow: 0px 9px 19px 0px white;
     color: white;
     height: 100vh;
     overflow-y: auto;
@@ -314,7 +319,7 @@ export default {
     }
 
     .cards_container {
-      box-shadow: 0px 0px 8px white;
+      box-shadow: 0px 0px 4px rgba(255, 255, 255, 0.95);
       position: relative;
       height: 350px;
       width: 240px;
