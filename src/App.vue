@@ -371,7 +371,7 @@ export default {
             });
             
             let SerieUrl = 'https://api.themoviedb.org/3/search/tv?api_key=' + this.Api_Key + '&language=it-IT&query=' + this.Query + '&page=1&include_adult=false';
-       return axios.get(SerieUrl).then((response) => {
+        axios.get(SerieUrl).then((response) => {
                //console.log(response);
                 this.Series = response.data.results;
                 this.Series.forEach(serie => {
