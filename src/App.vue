@@ -27,7 +27,7 @@
       <div class="movies_if" v-if="!Movies.length > 0">
              <h2>Film Popolari:</h2>
       <div class="control_movies_true" v-if="FilteredPopularMovies.length > 0">
-        <div class="row row-cols-xxl-5 row-cols-xl-4 row-cols-lg-3 row-cols-md-2 row-cols-1 justify-content-center">
+        <div class="row row-cols-xxl-5 row-cols-xl-4 row-cols-lg-3 row-cols-md-2 row-cols-1 ">
           <div class="col py-3 px-2 d-flex justify-content-center align-items-center" v-for="movie in FilteredPopularMovies" :key="movie.id">
             <div class="cards_container">
             <div class="card_container" :class="(movie.poster_path == null) ? 'bg_white' : ''">
@@ -91,7 +91,7 @@
       <div class="movies_if" v-else>
              <h2>Film:</h2>
       <div class="control_movies_true" v-if="FilteredMovies.length > 0">
-        <div class="row row-cols-xxl-5 row-cols-xl-4 row-cols-lg-3 row-cols-md-2 row-cols-1 justify-content-center">
+        <div class="row row-cols-xxl-5 row-cols-xl-4 row-cols-lg-3 row-cols-md-2 row-cols-1 ">
           <div class="col py-3 px-2 d-flex justify-content-center align-items-center" v-for="movie in FilteredMovies" :key="movie.id">
             <div class="cards_container">
             <div class="card_container" :class="(movie.poster_path == null) ? 'bg_white' : ''">
@@ -158,7 +158,7 @@
       <div class="series_if" v-if="!Series.length > 0">
         <h2 class="pt_4">Serie Popolari:</h2>
         <div class="control_series_true" v-if="FilteredPopularSeries.length > 0">
-        <div class="row row-cols-xxl-5 row-cols-xl-4 row-cols-lg-3 row-cols-md-2 row-cols-1 justify-content-center">
+        <div class="row row-cols-xxl-5 row-cols-xl-4 row-cols-lg-3 row-cols-md-2 row-cols-1 ">
           <div class="col py-3 px-2 d-flex justify-content-center align-items-center" v-for="serie in FilteredPopularSeries" :key="serie.id">
             <div class="cards_container">
             <div class="card_container" :class="(serie.poster_path == null) ? 'bg_white' : ''">
@@ -216,7 +216,7 @@
       <div class="series_if" v-else>
         <h2 class="pt_4">Serie:</h2>
         <div class="control_series_true" v-if="FilteredSeries.length > 0">
-        <div class="row row-cols-xxl-5 row-cols-xl-4 row-cols-lg-3 row-cols-md-2 row-cols-1 justify-content-center">
+        <div class="row row-cols-xxl-5 row-cols-xl-4 row-cols-lg-3 row-cols-md-2 row-cols-1 ">
           <div class="col py-3 px-2 d-flex justify-content-center align-items-center" v-for="serie in FilteredSeries" :key="serie.id">
             <div class="cards_container">
             <div class="card_container" :class="(serie.poster_path == null) ? 'bg_white' : ''">
